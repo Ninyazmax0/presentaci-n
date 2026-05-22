@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Presentación Oficial — Farmacia Santa Cruz</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#03060f;
+  --bg-card:rgba(8,14,30,0.6);
+  --bg-card-hover:rgba(14,24,52,0.82);
+  --t1:#f0f6ff;
+  --t2:#8fabc7;
+  --t3:#4a6282;
+  --bdr:rgba(100,160,220,0.1);
+  --bdr-h:rgba(56,210,180,0.4);
+  --em:#38d2b4;
+  --em2:rgba(56,210,180,0.07);
+  --tl:#0fb8a0;
+  --in:#7b8dff;
+  --in2:rgba(123,141,255,0.07);
+  --cy:#22d3ee;
+  --cy2:rgba(34,211,238,0.05);
+  --rd:#f43f5e;
+  --rd2:rgba(244,63,94,0.07);
+  --am:#fbbf24;
+  --am2:rgba(251,191,36,0.05);
+  --or:#fb923c;
+  --pu:#c084fc;
+  --pu2:rgba(192,132,252,0.07);
+  --font:'Outfit',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased}
+
+/* ===== AURORA BACKGROUND ===== */
+#aurora-canvas{
+  position:fixed;inset:0;z-index:-4;
+  pointer-events:none;
+}
+.bg-grid{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background-image:linear-gradient(rgba(56,210,180,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(56,210,180,0.025) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.bg-vignette{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(3,6,15,0.75) 100%);
+}
+/* Scanning line effect */
+.bg-scan{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(3,6,15,0.06) 2px,rgba(3,6,15,0.06) 4px);
+}
+
+/* ===== PROGRESS BAR ===== */
+#progress{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--em),var(--in),var(--cy));
+  z-index:200;transition:width .4s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 18px rgba(56,210,180,.5),0 0 6px rgba(56,210,180,.8);
+}
+
+/* ===== SLIDES ===== */
+.slides{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  padding:6vh 6vw;
+  display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;
+  transform:translateY(16px) scale(.98);
+  transition:opacity .45s cubic-bezier(.25,1,.5,1),transform .45s cubic-bezier(.25,1,.5,1),visibility .45s;
+  overflow:hidden;
+}
+.slide.active{opacity:1;visibility:visible;z-index:10;transform:translateY(0) scale(1)}
+
+/* Stagger */
+.stagger>*{opacity:0;transform:translateY(18px);transition:opacity .5s cubic-bezier(.25,1,.5,1),transform .5s cubic-bezier(.25,1,.5,1)}
+.slide.active .stagger>*{opacity:1;transform:translateY(0)}
+.slide.active .stagger>*:nth-child(1){transition-delay:.08s}
+.slide.active .stagger>*:nth-child(2){transition-delay:.16s}
+.slide.active .stagger>*:nth-child(3){transition-delay:.24s}
+.slide.active .stagger>*:nth-child(4){transition-delay:.32s}
+.slide.active .stagger>*:nth-child(5){transition-delay:.40s}
+
+/* ===== HEADER ===== */
+.shead{display:flex;flex-direction:column;padding-bottom:2vh;margin-bottom:3vh;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.shead-title{font-size:clamp(22px,3.2vh,40px);font-weight:700;color:var(--t1);display:flex;align-items:center;gap:14px}
+.shead-title .bar{display:block;width:5px;height:32px;background:linear-gradient(180deg,var(--em),var(--tl));border-radius:3px;flex-shrink:0}
+.shead-title .bar.in{background:linear-gradient(180deg,var(--in),var(--pu))}
+.shead-title .bar.am{background:linear-gradient(180deg,var(--am),var(--or))}
+.shead-title .bar.rd{background:linear-gradient(180deg,var(--rd),var(--am))}
+.shead-sub{font-size:clamp(11px,1.3vh,16px);color:var(--t3);margin-top:5px;margin-left:19px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;font-family:var(--mono)}
+
+.sbody{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1.8vh;min-height:0}
+
+/* ===== COVER ===== */
+.slide.cover{justify-content:center;align-items:center;text-align:center}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 22px;
+  background:var(--em2);border:1px solid rgba(56,210,180,.22);
+  border-radius:50px;font-size:clamp(11px,1.3vh,15px);color:var(--em);
+  text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:2.5vh;
+  font-family:var(--mono);
+}
+.badge.pu{background:var(--pu2);border-color:rgba(192,132,252,.22);color:var(--pu)}
+
+/* ===== GRIDS ===== */
+.cgrid{display:grid;gap:2.2vh 2vw;width:100%}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c4{grid-template-columns:repeat(4,1fr)}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--bg-card);border:1px solid var(--bdr);border-radius:16px;
+  padding:2.8vh 1.8vw;
+  display:flex;flex-direction:column;gap:1.2vh;
+  box-shadow:0 4px 24px rgba(0,0,0,.35);
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--em),transparent);opacity:0;transition:opacity .35s}
+.card:hover{border-color:var(--bdr-h);transform:translateY(-4px);background:var(--bg-card-hover);box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.card:hover::before{opacity:1}
+.card-icon{width:48px;height:48px;border-radius:12px;background:var(--em2);display:flex;align-items:center;justify-content:center;color:var(--em);font-size:20px;flex-shrink:0;margin-bottom:.8vh}
+.card-icon.pu{background:var(--pu2);color:var(--pu)}
+.card-icon.in{background:var(--in2);color:var(--in)}
+.card-icon.cy{background:var(--cy2);color:var(--cy)}
+.card-icon.am{background:var(--am2);color:var(--am)}
+.card-icon.rd{background:var(--rd2);color:var(--rd)}
+.card h4{font-size:clamp(14px,1.9vh,21px);font-weight:700;color:var(--t1)}
+.card p{font-size:clamp(12px,1.5vh,17px);color:var(--t2);line-height:1.7}
+.card strong{color:var(--t1)}
+.card .num{font-size:clamp(20px,2.5vh,30px);font-weight:800}
+.card .num.em{color:var(--em)}
+.card .num.in{color:var(--in)}
+.card .num.cy{color:var(--cy)}
+
+/* ===== TEXT BLOCKS ===== */
+.tblk{
+  font-size:clamp(14px,1.9vh,21px);color:var(--t2);line-height:1.8;
+  padding:2.2vh 2vw;
+  background:var(--bg-card);
+  border:1px solid var(--bdr);border-left:4px solid var(--em);
+  border-radius:0 14px 14px 0;
+  backdrop-filter:blur(12px);
+}
+.tblk strong,.tblk b{color:var(--t1);font-weight:600;background:var(--em2);padding:1px 7px;border-radius:5px}
+.tblk em{color:var(--cy);font-style:normal;font-weight:500}
+
+/* ===== LISTS ===== */
+.ulist{list-style:none;display:flex;flex-direction:column;gap:1.2vh}
+.ulist li{
+  font-size:clamp(13px,1.8vh,20px);color:var(--t2);
+  padding:1.5vh 1.8vw 1.5vh 3.2vw;
+  background:var(--bg-card);border:1px solid var(--bdr);border-radius:10px;
+  position:relative;transition:all .3s ease;backdrop-filter:blur(10px);
+}
+.ulist li:hover{border-color:var(--bdr-h);background:var(--bg-card-hover)}
+.ulist li::before{content:'\f101';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;left:1.2vw;top:50%;transform:translateY(-50%);color:var(--em)}
+
+/* ===== FULL SLIDE IFRAME ===== */
+.slide.iframe-slide{padding:0;overflow:hidden}
+.iframe-slide .iframe-header{
+  position:absolute;top:0;left:0;right:0;
+  height:48px;
+  background:rgba(3,6,15,.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;gap:12px;padding:0 20px;
+  z-index:10;
+}
+.iframe-slide .iframe-label{
+  font-size:13px;font-weight:600;color:var(--t2);font-family:var(--mono);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.iframe-slide .iframe-tag{
+  font-size:11px;color:var(--em);background:var(--em2);border:1px solid rgba(56,210,180,.2);
+  border-radius:20px;padding:2px 10px;font-family:var(--mono);white-space:nowrap;
+}
+.iframe-slide iframe{
+  position:absolute;top:48px;left:0;right:0;bottom:0;
+  width:100%;height:calc(100% - 48px);
+  border:none;background:#fff;pointer-events:none;
+}
+
+/* ===== LAYERS DIAGRAM ===== */
+.layers-wrap{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;max-width:720px;margin:0 auto}
+.lay-block{
+  width:100%;padding:2vh 2vw;
+  text-align:center;
+  border-radius:14px;
+  font-size:clamp(14px,1.8vh,19px);font-weight:600;
+  border:1px solid var(--bdr);
+  background:var(--bg-card);
+  color:var(--t1);
+  box-shadow:0 4px 18px rgba(0,0,0,.3);
+  transition:all .3s ease;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+.lay-block::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--em);transition:height .3s}
+.lay-block:hover::before{height:5px}
+.lay-block small{display:block;font-size:clamp(11px,1.3vh,14px);color:var(--t2);font-weight:400;margin-top:4px;font-family:var(--mono)}
+.lay-block.in::before{background:var(--in)}
+.lay-block.cy::before{background:var(--cy)}
+.lay-block.am::before{background:var(--am)}
+.lay-arr{font-size:1.4rem;color:var(--t3);opacity:.4;text-align:center;line-height:1;padding:.6vh 0}
+
+/* ===== STATS ===== */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:2vw;max-width:760px;margin:0 auto}
+.stat{
+  text-align:center;padding:3.5vh 2vw;
+  background:var(--bg-card);border-radius:18px;border:1px solid var(--bdr);
+  transition:all .3s ease;backdrop-filter:blur(12px);
+}
+.stat:hover{border-color:var(--bdr-h);transform:translateY(-3px)}
+.stat-num{font-size:clamp(44px,7vh,80px);font-weight:900;background:linear-gradient(135deg,var(--em),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:clamp(14px,1.7vh,20px);color:var(--t1);font-weight:600;margin-top:6px}
+.stat-desc{font-size:clamp(11px,1.2vh,15px);color:var(--t3);margin-top:4px}
+
+/* ===== QUOTE BLOCK ===== */
+.quote-block{
+  background:linear-gradient(135deg,var(--bg-card),rgba(56,210,180,0.08));
+  border:1px solid var(--em);border-radius:16px;
+  padding:2.8vh 2.5vw;text-align:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.3),0 0 40px rgba(56,210,180,0.06);
+  backdrop-filter:blur(12px);position:relative;
+}
+.quote-block::before{content:'\f10d';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;top:-14px;left:20px;font-size:28px;color:var(--em);opacity:.3}
+.quote-block .quote-text{font-size:clamp(15px,2vh,24px);color:var(--t1);line-height:1.7;font-weight:500;font-style:italic}
+.quote-block .quote-text em{color:var(--em);font-style:italic}
+.quote-block .quote-author{font-size:clamp(12px,1.4vh,17px);color:var(--t2);margin-top:1.5vh;font-family:var(--mono)}
+.quote-block .quote-author strong{color:var(--cy)}
+/* ===== CONCLUSION ===== */
+.conclusion{
+  background:var(--bg-card);border:1px solid var(--bdr);border-radius:16px;
+  padding:2.5vh 2.5vw;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.3);backdrop-filter:blur(12px);
+}
+.conclusion p{font-size:clamp(13px,1.7vh,20px);color:var(--t2);line-height:1.8;margin:.8vh 0}
+
+/* ===== CHAPTER ===== */
+.slide.chapter{justify-content:center;align-items:center;text-align:center}
+.ch-n{
+  font-size:clamp(72px,12vh,140px);font-weight:900;
+  background:linear-gradient(135deg,var(--em),var(--in),var(--cy));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;margin-bottom:2vh;
+}
+.ch-s{font-size:clamp(24px,4vh,48px);font-weight:700;color:var(--t1);margin-bottom:1.5vh}
+
+/* ===== TEAM / TECH ===== */
+.team-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:1.2vh 2.5vw}
+.team-grid span{font-size:clamp(13px,1.7vh,20px);color:var(--t2);font-weight:500}
+.team-grid .num{color:var(--em);font-weight:700}
+.tech-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:1.2vh 0}
+.tech-row span{
+  background:rgba(100,160,200,.07);padding:6px 16px;border-radius:8px;
+  border:1px solid var(--bdr);font-size:clamp(12px,1.4vh,16px);color:var(--t2);font-weight:500;
+  transition:all .3s;font-family:var(--mono);
+}
+.tech-row span:hover{border-color:var(--em);color:var(--em);background:var(--em2)}
+
+/* ===== DIAGRAM BOX (inline diagrams) ===== */
+.dbox{
+  flex:1;width:100%;min-height:0;
+  background:var(--bg-card);border:1px solid var(--bdr);border-radius:14px;
+  padding:2vh 1.5vw;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(12px);transition:border-color .3s;
+  overflow:hidden;
+}
+.dbox:hover{border-color:var(--bdr-h)}
+.diagram-caption{text-align:center;font-size:clamp(11px,1.3vh,15px);color:var(--t3);margin-top:.8vh;font-family:var(--mono)}
+
+/* ===== INLINE DIAGRAM COMPONENTS ===== */
+/* N-Tier Layer Display */
+.ntier{width:100%;max-width:680px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0}
+.ntier-layer{
+  width:100%;display:flex;align-items:stretch;border-radius:12px;overflow:hidden;
+  box-shadow:0 2px 16px rgba(0,0,0,.3);margin:3px 0;
+  border:1px solid var(--bdr);
+  transition:transform .25s,box-shadow .25s;
+}
+.ntier-layer:hover{transform:scaleX(1.018);box-shadow:0 4px 24px rgba(0,0,0,.5)}
+.ntier-accent{width:6px;flex-shrink:0}
+.ntier-body{flex:1;padding:1.4vh 1.4vw;background:rgba(8,14,30,.7);backdrop-filter:blur(12px)}
+.ntier-name{font-size:clamp(13px,1.6vh,18px);font-weight:700;color:var(--t1)}
+.ntier-tech{font-size:clamp(10px,1.2vh,14px);color:var(--t2);font-family:var(--mono);margin-top:2px}
+.ntier-icons{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.ntier-chip{font-size:10px;color:var(--t3);background:rgba(100,160,220,.07);border:1px solid var(--bdr);border-radius:20px;padding:2px 8px;font-family:var(--mono)}
+.ntier-arr{color:var(--t3);opacity:.35;font-size:1.1rem;text-align:center;padding:.4vh 0}
+.ntier-desc{font-size:clamp(10px,1.15vh,13px);color:var(--t2);margin-top:4px;line-height:1.4}
+
+/* Use Case Diagram */
+.uc-diagram{width:100%;height:100%;display:flex;flex-direction:column;gap:1.2vh}
+.uc-actor{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(8,14,30,.6);border:1px solid var(--bdr);border-radius:12px;
+  padding:1.2vh 1.5vw;backdrop-filter:blur(10px);
+}
+.uc-actor-icon{font-size:22px;width:40px;text-align:center;flex-shrink:0}
+.uc-actor-name{font-size:clamp(13px,1.5vh,17px);font-weight:600;color:var(--t1)}
+.uc-cases{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.uc-case{font-size:clamp(11px,1.3vh,15px);padding:4px 12px;border-radius:20px;border:1px solid;font-family:var(--mono);font-weight:500}
+
+/* Sequence Diagram */
+.seq-wrap{width:100%;overflow-x:auto;display:flex;flex-direction:column;gap:.6vh}
+.seq-row{display:grid;align-items:center;min-height:36px}
+.seq-actor{
+  font-size:clamp(11px,1.3vh,14px);font-weight:600;font-family:var(--mono);
+  padding:4px 10px;border-radius:8px;border:1px solid;text-align:center;
+}
+.seq-line{
+  display:flex;align-items:center;gap:8px;padding:4px 0;
+  font-size:clamp(11px,1.3vh,14px);
+}
+.seq-arrow{flex:1;height:1px;position:relative}
+.seq-arrow::after{content:'▶';position:absolute;right:-6px;top:50%;transform:translateY(-50%);font-size:10px}
+.seq-label{font-family:var(--mono);font-size:clamp(10px,1.2vh,13px);background:rgba(8,14,30,.8);border:1px solid var(--bdr);border-radius:6px;padding:2px 8px;white-space:nowrap;position:absolute;left:50%;transform:translateX(-50%);top:-20px}
+
+/* Class mini display */
+.class-box{
+  background:rgba(8,14,30,.7);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;
+  min-width:120px;backdrop-filter:blur(10px);
+}
+.class-header{padding:.6vh .8vw;font-weight:700;font-size:clamp(11px,1.3vh,15px);background:rgba(56,210,180,.08);border-bottom:1px solid var(--bdr);color:var(--t1)}
+.class-fields{padding:.4vh .8vw;display:flex;flex-direction:column;gap:2px}
+.class-field{font-size:clamp(9px,1.1vh,13px);font-family:var(--mono);color:var(--t2)}
+.class-field .vis{color:var(--em);margin-right:4px}
+.class-field .type{color:var(--in);font-size:.9em}
+
+/* Package diagram */
+.pkg{
+  border:1.5px solid var(--bdr);border-radius:12px;overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+.pkg-tab{
+  display:inline-block;padding:3px 12px;background:var(--bg-card);
+  border:1.5px solid var(--bdr);border-bottom:none;font-family:var(--mono);
+  font-size:clamp(11px,1.2vh,14px);font-weight:600;color:var(--em);
+  border-radius:8px 8px 0 0;margin-bottom:-1px;margin-left:10px;
+}
+.pkg-body{padding:1.2vh 1vw;background:rgba(8,14,30,.5);display:flex;flex-wrap:wrap;gap:6px}
+.pkg-item{
+  padding:4px 12px;border-radius:8px;font-size:clamp(10px,1.2vh,14px);font-family:var(--mono);
+  border:1px solid var(--bdr);color:var(--t2);background:rgba(100,160,220,.04);
+}
+
+/* GCP Deployment */
+.gcp-zone{
+  border:1.5px dashed var(--bdr);border-radius:14px;padding:1.5vh 1.5vw;
+  background:rgba(8,14,30,.4);backdrop-filter:blur(8px);
+}
+.gcp-zone-label{font-size:clamp(11px,1.3vh,15px);font-weight:600;color:var(--cy);font-family:var(--mono);margin-bottom:1vh}
+.gcp-service{
+  display:flex;align-items:center;gap:10px;padding:.8vh 1vw;
+  background:rgba(8,14,30,.6);border:1px solid var(--bdr);border-radius:10px;
+  margin-bottom:6px;transition:border-color .3s;
+}
+.gcp-service:hover{border-color:var(--bdr-h)}
+.gcp-svc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.gcp-svc-name{font-size:clamp(12px,1.4vh,16px);font-weight:600;color:var(--t1)}
+.gcp-svc-desc{font-size:clamp(10px,1.2vh,13px);color:var(--t2);font-family:var(--mono)}
+
+/* ===== UI MOCKUP SLIDES ===== */
+/* Full-screen mockup slide (no iframe) */
+.mockup-slide{padding:0}
+.mockup-slide .mockup-frame{
+  position:absolute;top:44px;left:0;right:0;bottom:0;overflow:hidden;
+}
+.mockup-bar{
+  position:absolute;top:0;left:0;right:0;height:44px;
+  background:rgba(3,6,15,.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;gap:12px;padding:0 18px;z-index:10;
+}
+.mockup-label{font-size:13px;font-weight:600;color:var(--t2);font-family:var(--mono)}
+.mockup-tag{font-size:11px;color:var(--em);background:var(--em2);border:1px solid rgba(56,210,180,.2);border-radius:20px;padding:2px 10px;font-family:var(--mono)}
+
+/* ===== COUNTER / HELPERS ===== */
+#counter{
+  position:fixed;bottom:22px;right:24px;z-index:100;
+  font-size:12px;font-weight:600;color:var(--em);
+  background:rgba(8,14,30,.92);backdrop-filter:blur(8px);
+  padding:5px 14px;border-radius:10px;border:1px solid rgba(56,210,180,.18);
+  font-family:var(--mono);display:none;
+}
+#arrowHint{
+  position:fixed;bottom:60px;left:50%;transform:translateX(-50%);z-index:100;
+  font-size:1.4rem;color:var(--t3);animation:pulse-h 2.5s infinite;pointer-events:none;opacity:.25;
+  display:none;
+}
+@keyframes pulse-h{0%,100%{opacity:.1}50%{opacity:.55}}
+.help-bar{
+  position:fixed;bottom:22px;left:24px;z-index:100;
+  display:flex;align-items:center;gap:10px;font-size:11px;color:var(--t3);pointer-events:none;
+  font-family:var(--mono);display:none;
+}
+.help-bar kbd{
+  background:rgba(100,160,200,.08);border:1px solid var(--bdr);
+  border-radius:4px;padding:2px 7px;font-size:10px;color:var(--t2);font-family:var(--mono);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){.c4{grid-template-columns:1fr 1fr}.slide{padding:5vh 4vw}}
+@media(max-width:768px){
+  .slide{padding:4vh 4vw}.c2,.c3,.c4{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}.help-bar{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- AURORA CANVAS -->
+<canvas id="aurora-canvas"></canvas>
+<div class="bg-grid"></div>
+<div class="bg-vignette"></div>
+<div class="bg-scan"></div>
+
+<div class="slides" id="slides">
+<div id="progress"></div>
+
+<!-- ==================== PORTADA ES ==================== -->
+<div class="slide active cover">
+  <div class="badge">Instituto Nacional de San Martín</div>
+  <h1 style="font-size:clamp(28px,4.5vh,54px);font-weight:900;color:var(--t1);line-height:1.2;margin-bottom:2vh;max-width:1050px">Diseño del Prototipo de la Línea Base de la Arquitectura del Software</h1>
+  <h2 style="font-size:clamp(18px,2.6vh,32px);font-weight:700;background:linear-gradient(135deg,var(--em),var(--tl),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1.5vh">Sistema de Gestión de Inventario — Farmacia Santa Cruz</h2>
+  <p style="font-size:clamp(13px,1.5vh,17px);color:var(--t3);margin-bottom:3.5vh;font-family:var(--mono)">Módulo 2.2: Diseño de Arquitectura de Software</p>
+  <div class="team-grid">
+    <span><span class="num">#04</span> Steven Gabriel López Hernández</span>
+    <span><span class="num">#08</span> Joel Edgardo Mendoza López</span>
+    <span><span class="num">#32</span> Guadalupe Abigaíl Romero Pedroza</span>
+    <span><span class="num">#34</span> Tiffany Alessandra Sermeño Flores</span>
+  </div>
+  <p style="font-size:clamp(11px,1.3vh,15px);color:var(--t3);margin-top:2.5vh;font-family:var(--mono)">Docente: Maria Magdalena García González · Mayo 2026</p>
+</div>
+
+<!-- ==================== PORTADA EN ==================== -->
+<div class="slide cover">
+  <div class="badge pu">National Institute of San Martín</div>
+  <h1 style="font-size:clamp(28px,4.5vh,54px);font-weight:900;color:var(--t1);line-height:1.2;margin-bottom:2vh;max-width:1050px">Design of the Software Architecture Baseline Prototype</h1>
+  <h2 style="font-size:clamp(18px,2.6vh,32px);font-weight:700;background:linear-gradient(135deg,var(--em),var(--tl),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1.5vh">Inventory Management System — Farmacia Santa Cruz</h2>
+  <p style="font-size:clamp(13px,1.5vh,17px);color:var(--t3);margin-bottom:3.5vh;font-family:var(--mono)">Module 2.2: Software Architecture Design</p>
+  <div class="team-grid">
+    <span><span class="num">#04</span> Steven Gabriel López Hernández</span>
+    <span><span class="num">#08</span> Joel Edgardo Mendoza López</span>
+    <span><span class="num">#32</span> Guadalupe Abigaíl Romero Pedroza</span>
+    <span><span class="num">#34</span> Tiffany Alessandra Sermeño Flores</span>
+  </div>
+  <p style="font-size:clamp(11px,1.3vh,15px);color:var(--t3);margin-top:2.5vh;font-family:var(--mono)">Teacher: Maria Magdalena García González · May 2026</p>
+</div>
+
+<!-- ==================== REFLEXIÓN ES 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>b. Reflexión — Cita Inspiradora</span><span class="shead-sub">Reflection — Quote</span></div>
+  <div class="sbody stagger" style="justify-content:center">
+    <div class="quote-block">
+      <div class="quote-text">«Un barco en el puerto está seguro, pero no es para eso para lo que se construyen los barcos. <em>Sal al mar y haz cosas nuevas</em>».</div>
+      <div class="quote-author">— <strong>Grace Hopper</strong><br><span style="font-size:clamp(10px,1.2vh,14px);color:var(--t3)">Creadora de COBOL y de los primeros compiladores que acercaron el código de máquina al lenguaje humano</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REFLEXIÓN ES 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>b. Reflexión — Aprendizaje y Estándares</span><span class="shead-sub">Reflection — Part 2 (b. Reflexión — DAS)</span></div>
+  <div class="sbody stagger">
+    <div class="tblk" style="border-left-color:var(--in)">
+      <strong>¿Qué aprendimos?</strong> Una línea base de arquitectura de software es fundamental para garantizar la calidad, mantenibilidad y escalabilidad de un sistema. Sin una arquitectura definida, los procesos de desarrollo se vuelven lentos, los costos de mantenimiento aumentan y la calidad del producto final se ve comprometida. Este proyecto nos permitió experimentar de primera mano el ciclo de vida del diseño arquitectónico.
+    </div>
+    <div class="tblk" style="border-left-color:var(--cy)">
+      <strong>Estándares aplicados:</strong> Aprendimos a documentar siguiendo la norma <strong>ISO/IEC/IEEE 42010:2022</strong> para descripción de arquitecturas, <strong>ISO 12207</strong> para procesos del ciclo de vida del software, y <strong>ISO 27002</strong> para controles de seguridad. Cada norma aportó una dimensión distinta: la primera nos dio el marco conceptual, la segunda la estructura de procesos, y la tercera las guías de protección de datos.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REFLEXIÓN ES 3 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>b. Reflexión — Habilidades y Desafíos</span><span class="shead-sub">Reflection — Part 3 (b. Reflexión — DAS)</span></div>
+  <div class="sbody stagger">
+    <div class="tblk" style="border-left-color:var(--em)">
+      <strong>Habilidades desarrolladas:</strong> Modelado UML (casos de uso, clases, secuencia, paquetes, componentes), diseño de bases de datos relacionales, aplicación de patrones como <strong>MVC, Repository, Dependency Injection</strong>, principios <strong>SOLID</strong>, y documentación técnica profesional. Trabajamos como equipo multidisciplinario usando Git para control de versiones.
+    </div>
+    <div class="tblk" style="border-left-color:var(--am)">
+      <strong>Desafíos superados:</strong> La coordinación entre miembros del equipo, la interpretación correcta de los requisitos de la farmacia, y la selección del stack tecnológico adecuado fueron retos que enfrentamos y resolvemos mediante reuniones semanales y revisiones cruzadas de código y documentación.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REFLEXIÓN EN 1 (Quote) ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>b. Reflection — Inspirational Quote</span><span class="shead-sub">Reflection — Quote</span></div>
+  <div class="sbody stagger" style="justify-content:center">
+    <div class="quote-block">
+      <div class="quote-text">«A ship in port is safe, but that is not what ships are built for. <em>Sail out to sea and do new things</em>».</div>
+      <div class="quote-author">— <strong>Grace Hopper</strong><br><span style="font-size:clamp(10px,1.2vh,14px);color:var(--t3)">Creator of COBOL and the first compilers that brought machine code closer to human language</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REFLEXIÓN EN 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>b. Reflection — Learning & Standards</span><span class="shead-sub">Reflection — Part 2 (b. Reflection — DAS)</span></div>
+  <div class="sbody stagger">
+    <div class="tblk" style="border-left-color:var(--in)">
+      <strong>What did we learn?</strong> A software architecture baseline is essential to guarantee quality, maintainability, and scalability. Without a defined architecture, development processes become slow, maintenance costs increase, and final product quality is compromised. This project allowed us to experience the architectural design lifecycle first-hand.
+    </div>
+    <div class="tblk" style="border-left-color:var(--cy)">
+      <strong>Applied standards:</strong> We learned to document following <strong>ISO/IEC/IEEE 42010:2022</strong> for architecture description, <strong>ISO 12207</strong> for software life cycle processes, and <strong>ISO 27002</strong> for security controls. Each standard contributed a different dimension: the first provided the conceptual framework, the second the process structure, and the third the data protection guidelines.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REFLEXIÓN EN 3 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>b. Reflection — Skills & Challenges</span><span class="shead-sub">Reflection — Part 3 (b. Reflection — DAS)</span></div>
+  <div class="sbody stagger">
+    <div class="tblk" style="border-left-color:var(--em)">
+      <strong>Developed skills:</strong> UML modeling (use cases, classes, sequence, packages, components), relational database design, application of patterns such as <strong>MVC, Repository, Dependency Injection</strong>, <strong>SOLID</strong> principles, and professional technical documentation. We worked as a multidisciplinary team using Git for version control.
+    </div>
+    <div class="tblk" style="border-left-color:var(--am)">
+      <strong>Overcome challenges:</strong> Team coordination, correct interpretation of pharmacy requirements, and selection of the appropriate technology stack were challenges we faced and resolved through weekly meetings and cross reviews of code and documentation.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== OBJETIVOS ES 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>c. Objetivos — General y Específicos (1-2)</span><span class="shead-sub">Objectives — Part 1</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card" style="border-left:4px solid var(--em);grid-column:1/-1">
+        <h4><i class="fas fa-bullseye" style="color:var(--em);margin-right:8px"></i>Objetivo General</h4>
+        <p style="color:var(--t1);font-size:clamp(13px,1.7vh,19px)">Diseñar el prototipo de la línea base de la arquitectura del software para el sistema de gestión de inventario de la <strong>Farmacia Santa Cruz</strong>, documentado bajo estándares ISO y utilizando una arquitectura N-Capas sobre Google Cloud Platform.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-check-circle" style="color:var(--em);margin-right:6px"></i>1. Requerimientos</h4>
+        <p>Identificar y organizar los requerimientos funcionales y no funcionales del sistema mediante entrevistas con la dueña de la farmacia y análisis de procesos actuales.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-sitemap" style="color:var(--in);margin-right:6px"></i>2. Arquitectura</h4>
+        <p>Definir una arquitectura en capas (Presentación, Negocio, Datos, Base de Datos) que garantice escalabilidad, mantenibilidad y separación de responsabilidades.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== OBJETIVOS ES 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>c. Objetivos — Específicos (3-5)</span><span class="shead-sub">Objectives — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <h4><i class="fas fa-diagram-project" style="color:var(--cy);margin-right:6px"></i>3. Diagramas UML</h4>
+        <p>Elaborar diagramas de casos de uso, clases, secuencia, paquetes y componentes que documenten visualmente la estructura y el comportamiento del sistema.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-paint-roller" style="color:var(--am);margin-right:6px"></i>4. Prototipo</h4>
+        <p>Desarrollar prototipos visuales (mockups) de las interfaces del sistema: dashboard, gestión de productos, punto de venta y consulta de alertas.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-check-double" style="color:var(--rd);margin-right:6px"></i>5. Validación</h4>
+        <p>Validar que el diseño arquitectónico y los diagramas cubran todas las necesidades identificadas de la Farmacia Santa Cruz.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== OBJETIVOS EN 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>c. Objectives — General and Specific (1-2)</span><span class="shead-sub">Objectives — Part 1</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card" style="border-left:4px solid var(--em);grid-column:1/-1">
+        <h4><i class="fas fa-bullseye" style="color:var(--em);margin-right:8px"></i>General Objective</h4>
+        <p style="color:var(--t1);font-size:clamp(13px,1.7vh,19px)">Design the software architecture baseline prototype for the inventory management system of <strong>Farmacia Santa Cruz</strong>, documented under ISO standards using an N-Tier architecture on Google Cloud Platform.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-check-circle" style="color:var(--em);margin-right:6px"></i>1. Requirements</h4>
+        <p>Identify and organize functional and non-functional requirements through interviews with the pharmacy owner and analysis of current processes.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-sitemap" style="color:var(--in);margin-right:6px"></i>2. Architecture</h4>
+        <p>Define a layered architecture (Presentation, Business, Data, Database) that guarantees scalability, maintainability, and separation of concerns.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== OBJETIVOS EN 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>c. Objectives — Specific (3-5)</span><span class="shead-sub">Objectives — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <h4><i class="fas fa-diagram-project" style="color:var(--cy);margin-right:6px"></i>3. UML Diagrams</h4>
+        <p>Develop use case, class, sequence, package, and component diagrams that visually document the system structure and behavior.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-paint-roller" style="color:var(--am);margin-right:6px"></i>4. Prototype</h4>
+        <p>Develop visual prototypes (mockups) of the system interfaces: dashboard, product management, point of sale, and alerts.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-check-double" style="color:var(--rd);margin-right:6px"></i>5. Validation</h4>
+        <p>Validate that the architectural design and diagrams cover all identified needs of Farmacia Santa Cruz.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PROBLEMA ES 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar rd"></span>d. Situación Problemática — Introducción</span><span class="shead-sub">Problem Statement — Part 1</span></div>
+  <div class="sbody stagger">
+    <div class="tblk" style="border-left-color:var(--rd)">
+      La empresa <strong>The Repair of System</strong> no cuenta con una línea base de arquitectura de software definida, provocando procesos de desarrollo lentos, baja calidad y altos costos de mantenimiento. La <strong>Farmacia Santa Cruz</strong> carece de un sistema automatizado de compra y venta, dificultando el control de inventario y fechas de vencimiento.
+    </div>
+    <div class="card" style="border-left:4px solid var(--rd)">
+      <h4><i class="fas fa-exclamation-triangle" style="color:var(--rd);margin-right:8px"></i>El Núcleo del Problema</h4>
+      <p>La inexistencia de una estructura formal impide la estabilidad técnica y ralentiza las operaciones comerciales de la farmacia, generando pérdidas económicas directas y desorganización general.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PROBLEMA ES 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar rd"></span>d. Situación Problemática — Desglose</span><span class="shead-sub">Problem Statement — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card" style="border-left:3px solid var(--rd)">
+        <h4><i class="fas fa-cog" style="color:var(--rd);margin-right:8px"></i>Problemas Técnicos</h4>
+        <p>Procesos sin metodología, ausencia de documentación arquitectónica, código sin patrones estructurados y gran dificultad para incorporar nuevos desarrolladores.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--am)">
+        <h4><i class="fas fa-boxes-stacked" style="color:var(--am);margin-right:8px"></i>Problemas Operativos</h4>
+        <p>Control de inventario manual en cuadernos, desconocimiento de caducidades cercanas, pérdidas de ventas por rotura de stock y atraso en pedidos.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--in)">
+        <h4><i class="fas fa-shield-halved" style="color:var(--in);margin-right:8px"></i>Riesgos</h4>
+        <p>Incumplimiento de regulaciones sanitarias (MINSAL), errores humanos graves de registro, pérdida total de datos por falta de respaldos confiables.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PROBLEMA EN 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar rd"></span>d. Problem Situation — Introduction</span><span class="shead-sub">Problem Statement — Part 1</span></div>
+  <div class="sbody stagger">
+    <div class="tblk" style="border-left-color:var(--rd)">
+      The company <strong>The Repair of System</strong> does not have a defined software architecture baseline, causing slow development processes, low quality, and high maintenance costs. <strong>Farmacia Santa Cruz</strong> lacks an automated purchase and sale system, making inventory control and expiration date management difficult.
+    </div>
+    <div class="card" style="border-left:4px solid var(--rd)">
+      <h4><i class="fas fa-exclamation-triangle" style="color:var(--rd);margin-right:8px"></i>The Root Problem</h4>
+      <p>The lack of a structured architectural base compromises scalability and leaves the business exposed to critical data loss and manual auditing delays.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PROBLEMA EN 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar rd"></span>d. Problem Situation — Details</span><span class="shead-sub">Problem Statement — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card" style="border-left:3px solid var(--rd)">
+        <h4><i class="fas fa-cog" style="color:var(--rd);margin-right:8px"></i>Technical Problems</h4>
+        <p>Development processes without defined methodology, lack of structural documentation, code with no standards and high onboarding friction.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--am)">
+        <h4><i class="fas fa-boxes-stacked" style="color:var(--am);margin-right:8px"></i>Operational Problems</h4>
+        <p>Manual inventory control in notebooks, no visibility of soon-to-expire batches, lost sales due to stockouts and delays in orders.</p>
+      </div>
+      <div class="card" style="border-left:3px solid var(--in)">
+        <h4><i class="fas fa-shield-halved" style="color:var(--in);margin-right:8px"></i>Risks</h4>
+        <p>Non-compliance with local health regulations (MINSAL), high human error margins in records, and critical loss of data due to lack of backups.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SOLUCIÓN ES 1 — Visión ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>e. Propuesta de Solución — Visión General</span><span class="shead-sub">Proposed Solution — Overview</span></div>
+  <div class="sbody">
+    <div class="tblk" style="border-left-color:var(--em)">
+      Diseñamos la línea base de arquitectura del <strong>Sistema de Gestión de Inventario para Farmacia Santa Cruz (SGIFSC)</strong> utilizando <strong>Google Cloud Platform</strong> como infraestructura principal, con una arquitectura <strong>N-Tier (4 capas)</strong> documentada bajo <strong>ISO/IEC/IEEE 42010:2022, 12207 y 27002</strong>.
+    </div>
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-cubes" style="color:var(--cy);margin-right:8px"></i>Stack Tecnológico</h4>
+        <div class="tech-row" style="margin:0;justify-content:flex-start">
+          <span>.NET Core 8</span><span>Angular/React</span><span>MySQL</span><span>Google Cloud</span><span>Docker</span><span>JWT</span><span>Bootstrap 5</span><span>Redis</span>
+        </div>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-file-shield" style="color:var(--em);margin-right:8px"></i>Seguridad y Estándares</h4>
+        <p>Autenticación JWT con roles <strong>Dueña</strong> y <strong>Empleado</strong>, comunicación HTTPS, Data Protection, sesión de 30 minutos, recuperación de contraseña por correo, AuditLog.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SOLUCIÓN ES 2 — Componentes ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>e. Propuesta — Frontend, Backend y BD</span><span class="shead-sub">Proposed Solution — Core Components</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-display"></i></div>
+        <h4>Interfaz de Usuario</h4>
+        <p><strong>Angular / React</strong> + Bootstrap 5. Interfaz moderna y responsive con dashboards, POS fluido y tablas de alerta inmediata.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon pu"><i class="fas fa-server"></i></div>
+        <h4>Capa Lógica (API)</h4>
+        <p><strong>.NET Core 8</strong>, C#. API RESTful robusta con servicios desacoplados (InventarioService, VentaService, AlertaService) y control JWT.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon am"><i class="fas fa-database"></i></div>
+        <h4>Base de Datos</h4>
+        <p><strong>MySQL en Cloud SQL</strong>. Estructuración relacional para Productos, Lotes, Ventas, Proveedores, Categorías, Alertas y Logs de Auditoría.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SOLUCIÓN ES 3 — Infraestructura ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>e. Propuesta — Infraestructura, Reglas y Flujos</span><span class="shead-sub">Proposed Solution — Deployment & Logic</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <div class="card-icon cy"><i class="fas fa-cloud"></i></div>
+        <h4>Infraestructura Cloud</h4>
+        <p><strong>Google Cloud Platform</strong>. Cloud Run (contenedores Docker), Cloud SQL, Cloud Storage para respaldos automáticos, y Redis para caché.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon rd"><i class="fas fa-truck-fast"></i></div>
+        <h4>Reglas de Negocio</h4>
+        <p>Venta estricta con regla <strong>FIFO</strong> por lote, sistema de alertas automatizado para vencimiento (30/15/7 días) y control de stock mínimo.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon am"><i class="fas fa-arrows-spin"></i></div>
+        <h4>Flujos Operacionales</h4>
+        <p>Entrada de productos con asociación de número de lote y fecha de vencimiento, validaciones de integridad y auditoría histórica.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SOLUCIÓN EN 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>e. Proposed Solution — Overview</span><span class="shead-sub">Proposed Solution — Overview</span></div>
+  <div class="sbody">
+    <div class="tblk" style="border-left-color:var(--em)">
+      We designed the architecture baseline for the <strong>Inventory Management System for Farmacia Santa Cruz (SGIFSC)</strong> using <strong>Google Cloud Platform</strong> as the main infrastructure, with an <strong>N-Tier (4-layer)</strong> architecture documented under <strong>ISO/IEC/IEEE 42010:2022, 12207, and 27002</strong>.
+    </div>
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-cubes" style="color:var(--cy);margin-right:8px"></i>Selected Tech Stack</h4>
+        <div class="tech-row" style="margin:0;justify-content:flex-start">
+          <span>.NET Core 8</span><span>Angular/React</span><span>MySQL</span><span>Google Cloud</span><span>Docker</span><span>JWT</span><span>Bootstrap 5</span><span>Redis</span>
+        </div>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-file-shield" style="color:var(--em);margin-right:8px"></i>Security & Standards</h4>
+        <p>JWT authentication with <strong>Owner</strong> and <strong>Employee</strong> roles, HTTPS communication, Data Protection, 30-minute session expiration, and full Audit Logging.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SOLUCIÓN EN 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>e. Proposed Solution — Core Components</span><span class="shead-sub">Proposed Solution — Part 1</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-display"></i></div>
+        <h4>Frontend (UI)</h4>
+        <p><strong>Angular / React</strong> + Bootstrap 5. Modern responsive interface featuring dashboards, stock forms, and a secure checkout POS terminal.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon pu"><i class="fas fa-server"></i></div>
+        <h4>Backend Core</h4>
+        <p><strong>.NET Core 8</strong>, C#. RESTful API with dependency-injected services, controllers, token verification pipelines, and decoupled handlers.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon am"><i class="fas fa-database"></i></div>
+        <h4>Database Model</h4>
+        <p><strong>MySQL on Cloud SQL</strong>. Relational model mapping Products, Batches, Sales, Suppliers, Categories, Alerts, and Audit Logs.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SOLUCIÓN EN 3 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>e. Proposed Solution — Infrastructure & Rules</span><span class="shead-sub">Proposed Solution — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <div class="card-icon cy"><i class="fas fa-cloud"></i></div>
+        <h4>Cloud Infrastructure</h4>
+        <p><strong>Google Cloud Platform</strong>. Cloud SQL (Managed MySQL), serverless containers via Cloud Run, secured storage buckets, and Redis Memorystore.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon rd"><i class="fas fa-truck-fast"></i></div>
+        <h4>Business Logic</h4>
+        <p>Strict <strong>FIFO</strong> batch dispatching, automated cron-jobs to flag critical batches at 30/15/7 days, and low stock threshold alarms.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon am"><i class="fas fa-arrows-spin"></i></div>
+        <h4>Operational Flows</h4>
+        <p>Efficient drug intake tracking with immediate batch assignment, automated stock subtraction, state transitions, and granular activity logs.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CHAPTER: DEMO ==================== -->
+<div class="slide chapter">
+  <div class="ch-n">F</div>
+  <div class="ch-s">Demostración</div>
+  <p style="font-size:clamp(14px,1.8vh,22px);color:var(--t2);margin-top:2vh;max-width:640px;line-height:1.6">Estructura del DAS · Visualización de la Arquitectura · Diagramas UML · Diseños de Pantallas</p>
+</div>
+
+<!-- ==================== DAS SÍNTESIS 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>f. Síntesis del DAS — Arquitectura y Tecnologías</span><span class="shead-sub">DAS Synthesis — Part 1</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card">
+        <h4><span class="num em">01</span> Introducción</h4>
+        <p><strong>Propósito:</strong> Definir las decisiones de diseño arquitectónico, límites de capas, patrones y responsabilidades del sistema SGIFSC.</p>
+      </div>
+      <div class="card">
+        <h4><span class="num in">02</span> Stack de Desarrollo</h4>
+        <p>Interoperabilidad entre <strong>Angular/React</strong> en el cliente, <strong>.NET Core 8</strong> en servicios centrales y base de datos relacional <strong>MySQL</strong>.</p>
+      </div>
+      <div class="card">
+        <h4><span class="num cy">03</span> Patrones Utilizados</h4>
+        <p>Estructura N-Tier apoyada en patrones clave como <strong>Repository, Unit of Work, Dependency Injection</strong> y modelo <strong>MVC</strong>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAS SÍNTESIS 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>f. Síntesis del DAS — Datos, Seguridad y Reglas</span><span class="shead-sub">DAS Synthesis — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c3 stagger">
+      <div class="card" style="border-top:3px solid var(--am)">
+        <h4><span class="num" style="color:var(--am)">04</span> Modelo y Motor</h4>
+        <p>Normalización estricta de MySQL 8.0 en la nube con particionamiento de lotes y almacenamiento de archivos planos.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--rd)">
+        <h4><span class="num" style="color:var(--rd)">05</span> Mecanismos de Seguridad</h4>
+        <p>Tokens JWT con caducidad, encriptación SHA256, canal HTTPS forzado y logs de auditoría inmutables.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--or)">
+        <h4><span class="num" style="color:var(--or)">06</span> Lógica FIFO y Alertas</h4>
+        <p>Despacho automatizado priorizando el vencimiento más cercano, evitando mermas y enviando notificaciones proactivas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAS SÍNTESIS 3 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>f. Síntesis del DAS — Flujos Operacionales</span><span class="shead-sub">DAS Synthesis — Part 3</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><span class="num em">07</span> Registro de Productos y Lotes</h4>
+        <p>Flujo seguro para persistir datos del producto (categoría, stock mínimo, costo). Se encadena con el registro de lotes que capturan el número de lote, cantidad inicial y fecha de vencimiento precisa.</p>
+      </div>
+      <div class="card">
+        <h4><span class="num in">08</span> Procesamiento de Ventas (FIFO)</h4>
+        <p>El POS consulta los lotes activos ordenados por vencimiento ascendente. Se deducen existencias secuencialmente del lote más antiguo, manteniendo el control exacto de remanentes.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DAS SÍNTESIS 4 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>f. Síntesis del DAS — Trabajos e Infraestructura</span><span class="shead-sub">DAS Synthesis — Part 4</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card" style="border-top:3px solid var(--cy)">
+        <h4><span class="num cy">09</span> Alertas Programadas</h4>
+        <p>Background worker diario que escanea el estado de los lotes activos, clasificando riesgos en niveles de severidad (vencimiento cercano, retiro o stock crítico).</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--am)">
+        <h4><span class="num" style="color:var(--am)">10</span> Distribución Cloud</h4>
+        <p>Hospedaje en Google Cloud mediante Cloud Run para elasticidad, Cloud SQL de alta disponibilidad y caché compartida por Redis.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ARQUITECTURA N-TIER — IFRAME ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">N-Capas</span>
+    <span class="iframe-label">f. Representación de la Arquitectura — N-Tier / MVC · Arquitectura N-Capas (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/index.html"></iframe>
+</div>
+
+<!-- ==================== CAPAS DETALLE 1 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>f. Detalle de Capas — Presentación y Negocio</span><span class="shead-sub">Layers Detail — Part 1</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-display" style="color:var(--em);margin-right:8px"></i>Capa de Presentación (UI)</h4>
+        <p><strong>Responsabilidad:</strong> Renderizado de interfaces limpias, captura del flujo de entrada del usuario y presentación interactiva de datos procesados.</p>
+        <p><strong>En SGIFSC:</strong> Formularios para transacciones, buscador de medicamentos en el POS y gráficos para la propietaria.</p>
+        <p><strong>Herramientas:</strong> Angular 17/React 18, Bootstrap 5, Font Awesome, Chart.js.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-brain" style="color:var(--in);margin-right:8px"></i>Capa de Lógica de Negocio (BLL)</h4>
+        <p><strong>Responsabilidad:</strong> Validación de reglas comerciales, orquestación de tareas complejas e intermediario lógico inmutable.</p>
+        <p><strong>En SGIFSC:</strong> <em style="color:var(--cy);font-style:normal">InventarioService</em> para stock, <em style="color:var(--cy);font-style:normal">VentaService</em> con estrategia FIFO y <em style="color:var(--cy);font-style:normal">AlertaService</em> para mermas.</p>
+        <p><strong>Herramientas:</strong> .NET Core 8, C#, AutoMapper, FluentValidation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CAPAS DETALLE 2 ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>f. Detalle de Capas — Datos y Almacenamiento</span><span class="shead-sub">Layers Detail — Part 2</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-database" style="color:var(--cy);margin-right:8px"></i>Capa de Acceso a Datos (DAL)</h4>
+        <p><strong>Responsabilidad:</strong> Abstracción total de la infraestructura física de persistencia, facilitando operaciones CRUD sin código SQL plano.</p>
+        <p><strong>En SGIFSC:</strong> Repositorios genéricos (ProductoRepository, LoteRepository, VentaRepository) bajo Unit of Work.</p>
+        <p><strong>Herramientas:</strong> Entity Framework Core, MySQL Connector, LINQ.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-server" style="color:var(--am);margin-right:8px"></i>Base de Datos</h4>
+        <p><strong>Responsabilidad:</strong> Almacenamiento consistente, seguro y veloz de todas las entidades, asegurando la integridad referencial.</p>
+        <p><strong>En SGIFSC:</strong> MySQL optimizado con índices en campos clave y Stored Procedures para operaciones recurrentes.</p>
+        <p><strong>Herramientas:</strong> MySQL 8.0 en Google Cloud SQL.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CASOS DE USO — INTRO ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>f. Vista de Casos de Uso — Introducción</span><span class="shead-sub">Use Case View — Overview</span></div>
+  <div class="sbody">
+    <div class="tblk" style="border-left-color:var(--em);text-align:center">
+      La vista de casos de uso describe las interacciones funcionales desde la perspectiva del operador. Identificamos <strong>7 casos de uso</strong> que estructuran las necesidades de la farmacia, bajo los roles de <strong>Dueña</strong> y <strong>Empleado</strong>.
+    </div>
+    <div class="cgrid c3 stagger" style="margin-top:1.5vh">
+      <div class="card" style="border-left:3px solid var(--em);gap:4px"><h4>CU-01</h4><p>Inicio de Sesión Seguro</p></div>
+      <div class="card" style="border-left:3px solid var(--in);gap:4px"><h4>CU-02</h4><p>Gestión de Productos</p></div>
+      <div class="card" style="border-left:3px solid var(--cy);gap:4px"><h4>CU-03</h4><p>Control de Inventario y Lotes</p></div>
+      <div class="card" style="border-left:3px solid var(--am);gap:4px"><h4>CU-04</h4><p>Registro de Ventas (FIFO)</p></div>
+      <div class="card" style="border-left:3px solid var(--or);gap:4px"><h4>CU-05</h4><p>Gestión Activa de Alertas</p></div>
+      <div class="card" style="border-left:3px solid var(--rd);gap:4px"><h4>CU-06</h4><p>Administración de Usuarios</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CU-01 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-01</span>
+    <span class="iframe-label">f. CU-01 — Inicio de Sesión · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc01.html"></iframe>
+</div>
+
+<!-- ==================== CU-02 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-02</span>
+    <span class="iframe-label">f. CU-02 — Gestión de Productos · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc02.html"></iframe>
+</div>
+
+<!-- ==================== CU-03 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-03</span>
+    <span class="iframe-label">f. CU-03 — Control de Inventario · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc03.html"></iframe>
+</div>
+
+<!-- ==================== CU-04 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-04</span>
+    <span class="iframe-label">f. CU-04 — Registro de Ventas FIFO · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc04.html"></iframe>
+</div>
+
+<!-- ==================== CU-05 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-05</span>
+    <span class="iframe-label">f. CU-05 — Gestión de Alertas · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc05.html"></iframe>
+</div>
+
+<!-- ==================== CU-06 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-06</span>
+    <span class="iframe-label">f. CU-06 — Administración de Usuarios · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc06.html"></iframe>
+</div>
+
+<!-- ==================== CU-07 ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">CU-07</span>
+    <span class="iframe-label">f. CU-07 — Reportes Estadísticos · Vista de Casos de Uso (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/uc07.html"></iframe>
+</div>
+
+<!-- ==================== DIAGRAMA DE CLASES ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Diagrama de Clases</span>
+    <span class="iframe-label">f. Diagrama de Clases — Vista Lógica · Modelo de Dominio (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/clases.html"></iframe>
+</div>
+
+<!-- ==================== SEQ: LOGIN ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">SEQ-01</span>
+    <span class="iframe-label">f. SEQ-01 — Inicio de Sesión · Vista Lógica — Diagrama de Secuencia (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/seq01.html"></iframe>
+</div>
+
+<!-- ==================== SEQ: VENTA FIFO ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">SEQ-04</span>
+    <span class="iframe-label">f. SEQ-04 — Procesar Venta FIFO · Vista Lógica — Diagrama de Secuencia (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/seq04.html"></iframe>
+</div>
+
+<!-- ==================== SEQ: ALERTAS ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">SEQ-05</span>
+    <span class="iframe-label">f. SEQ-05 — Generación de Alertas · Vista Lógica — Diagrama de Secuencia (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/seq05.html"></iframe>
+</div>
+
+<!-- ==================== SEQ: REGISTRO PRODUCTO ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">SEQ-02</span>
+    <span class="iframe-label">f. SEQ-02 — Registro de Productos · Vista Lógica — Diagrama de Secuencia (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/seq02.html"></iframe>
+</div>
+
+<!-- ==================== DIAGRAMA DE PAQUETES ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Paquetes</span>
+    <span class="iframe-label">f. Vista de Componentes — Diagrama de Paquetes · SantaCruz.Web · SantaCruz.Core · SantaCruz.DAL (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/paquetes.html"></iframe>
+</div>
+
+<!-- ==================== DIAGRAMA MVC ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">MVC</span>
+    <span class="iframe-label">f. Modelo-Vista-Controlador — Diagrama MVC · Componentes (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/mvc_full.html"></iframe>
+</div>
+
+<!-- ==================== DESPLIEGUE GCP ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Despliegue</span>
+    <span class="iframe-label">f. Vista de Implementación — Diagrama de Componentes · GCP (DAS)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/componentes.html"></iframe>
+</div>
+
+<!-- ==================== UI: DASHBOARD ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Mockup</span>
+    <span class="iframe-label">f. Prototipo Visual — Dashboard Principal · KPIs · Alertas (Demostración)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/ui_dashboard.html"></iframe>
+</div>
+
+<!-- ==================== UI: PRODUCTOS ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Mockup</span>
+    <span class="iframe-label">f. Prototipo Visual — Gestión de Productos (Demostración)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/ui_productos.html"></iframe>
+</div>
+
+<!-- ==================== UI: LOGIN ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Mockup</span>
+    <span class="iframe-label">f. Prototipo Visual — Control de Acceso · Login (Demostración)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/ui_login.html"></iframe>
+</div>
+
+<!-- ==================== UI: VENTAS ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Mockup</span>
+    <span class="iframe-label">f. Prototipo Visual — Terminal POS · Venta FIFO (Demostración)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/ui_ventas.html"></iframe>
+</div>
+
+<!-- ==================== UI: ALERTAS ==================== -->
+<div class="slide iframe-slide">
+  <div class="iframe-header">
+    <span class="iframe-tag">Mockup</span>
+    <span class="iframe-label">f. Prototipo Visual — Panel de Alertas Sanitarias (Demostración)</span>
+  </div>
+  <iframe src="Presentacion/diagramas/ui_alertas.html"></iframe>
+</div>
+
+<!-- ==================== CHAPTER: CONCLUSIÓN ==================== -->
+<div class="slide chapter">
+  <div class="ch-n">G</div>
+  <div class="ch-s">Conclusión</div>
+</div>
+
+<!-- ==================== CONCLUSIÓN ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar"></span>g. Conclusión del Proyecto</span></div>
+  <div class="sbody" style="justify-content:center">
+    <div class="stats" style="margin-bottom:2.5vh">
+      <div class="stat">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Reducción de Pérdidas</div>
+        <div class="stat-desc">Por control de caducidades y stock óptimo</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="background:linear-gradient(135deg,var(--in),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent">30%</div>
+        <div class="stat-label">Ahorro de Tiempo</div>
+        <div class="stat-desc">En búsqueda y registro de productos</div>
+      </div>
+    </div>
+    <div class="conclusion">
+      <p>El diseño de la línea base arquitectónica para el sistema de control de existencias de la <strong>Farmacia Santa Cruz</strong> cumple con los estándares internacionales <strong>ISO/IEC/IEEE 42010:2022</strong>, <strong>ISO 12207</strong> e <strong>ISO 27002</strong>.</p>
+      <p>La estructuración N-Tier en 4 capas desacopladas garantiza que el sistema pueda crecer sin comprometer la estabilidad operacional. Los diagramas UML y los prototipos visuales sirven como el plano definitivo para un desarrollo seguro y eficiente en la nube.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== GRACIAS ==================== -->
+<div class="slide" style="justify-content:center;align-items:center;text-align:center">
+  <div class="ch-n" style="font-size:clamp(56px,10vh,120px);margin-bottom:2vh">GRACIAS</div>
+  <p style="font-size:clamp(16px,2.4vh,28px);color:var(--t2);margin-bottom:1vh">¿Tienen alguna pregunta?</p>
+  <p style="font-size:clamp(12px,1.4vh,17px);color:var(--t3);margin-bottom:3vh;font-family:var(--mono)">Instituto Nacional de San Martín · Grupo N° 7 · Mayo 2026</p>
+  <div class="team-grid" style="background:var(--bg-card);border:1px solid var(--bdr);border-radius:14px;padding:2vh 3vw;backdrop-filter:blur(8px)">
+    <span>Steven López #04</span><span style="color:var(--t3);opacity:.3">|</span>
+    <span>Joel Mendoza #08</span><span style="color:var(--t3);opacity:.3">|</span>
+    <span>Guadalupe Romero #32</span><span style="color:var(--t3);opacity:.3">|</span>
+    <span>Tiffany Sermeño #34</span>
+  </div>
+  <p style="font-size:clamp(11px,1.3vh,15px);color:var(--t3);margin-top:2.5vh;font-family:var(--mono)">Docente: Maria Magdalena García González</p>
+</div>
+
+</div><!-- /slides -->
+
+<div id="counter">1</div>
+<div id="arrowHint">&#8592; &#8594;</div>
+<div class="help-bar"><kbd>&larr;</kbd><kbd>&rarr;</kbd> navegar &nbsp;·&nbsp; <kbd>Home</kbd><kbd>End</kbd> saltar &nbsp;·&nbsp; <kbd>F</kbd> pantalla completa</div>
+
+<script>
+/* ===================================================
+   AURORA BACKGROUND — Canvas WebGL-style animated
+   =================================================== */
+(function(){
+  const canvas = document.getElementById('aurora-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Aurora color stops — rich dark palette
+  const auroras = [
+    { hue: 168, sat: 75, speed: 0.0004, amp: 0.22, phase: 0,    yBase: 0.35 },
+    { hue: 240, sat: 70, speed: 0.0003, amp: 0.18, phase: 2.1,  yBase: 0.55 },
+    { hue: 195, sat: 80, speed: 0.0005, amp: 0.14, phase: 4.5,  yBase: 0.25 },
+    { hue: 270, sat: 60, speed: 0.00025,amp: 0.20, phase: 1.3,  yBase: 0.65 },
+    { hue: 150, sat: 65, speed: 0.00045,amp: 0.12, phase: 3.8,  yBase: 0.45 },
+  ];
+
+  // Particle system
+  const particles = Array.from({length: 55}, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: Math.random() * 1.8 + 0.4,
+    sx: (Math.random() - 0.5) * 0.00012,
+    sy: (Math.random() - 0.5) * 0.00008,
+    a: Math.random() * 0.35 + 0.05,
+    hue: Math.random() * 60 + 150,
+  }));
+
+  function drawAurora(a, t){
+    const points = 6;
+    const gradient = ctx.createLinearGradient(0, 0, W, 0);
+
+    for(let i = 0; i <= points; i++){
+      const x = i / points;
+      const wave = Math.sin(x * Math.PI * 2.5 + t * a.speed * 8000 + a.phase) * a.amp;
+      const centerY = (a.yBase + wave) * H;
+      const spread = H * (0.12 + Math.sin(x * Math.PI + t * a.speed * 3000) * 0.06);
+
+      const grad = ctx.createLinearGradient(0, centerY - spread, 0, centerY + spread);
+      const alpha = 0.06 + Math.sin(x * Math.PI * 1.5 + t * a.speed * 5000) * 0.03;
+      grad.addColorStop(0,   `hsla(${a.hue},${a.sat}%,65%,0)`);
+      grad.addColorStop(0.4, `hsla(${a.hue},${a.sat}%,65%,${alpha})`);
+      grad.addColorStop(0.5, `hsla(${a.hue+20},${a.sat}%,72%,${alpha * 1.4})`);
+      grad.addColorStop(0.6, `hsla(${a.hue},${a.sat}%,65%,${alpha})`);
+      grad.addColorStop(1,   `hsla(${a.hue},${a.sat}%,65%,0)`);
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, centerY - spread, W, spread * 2);
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+
+    // Deep space background
+    const bg = ctx.createRadialGradient(W*.5, H*.4, 0, W*.5, H*.5, Math.max(W,H)*.8);
+    bg.addColorStop(0,   'rgba(4, 8, 22, 0.98)');
+    bg.addColorStop(0.5, 'rgba(3, 6, 15, 0.99)');
+    bg.addColorStop(1,   'rgba(2, 4, 10, 1)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Aurora bands
+    ctx.globalCompositeOperation = 'lighter';
+    auroras.forEach(a => drawAurora(a, t));
+
+    // Stars / particles
+    ctx.globalCompositeOperation = 'source-over';
+    particles.forEach(p => {
+      p.x = (p.x + p.sx + 1) % 1;
+      p.y = (p.y + p.sy + 1) % 1;
+      const pulse = 0.5 + 0.5 * Math.sin(t * 0.002 + p.phase * 100);
+      ctx.beginPath();
+      ctx.arc(p.x * W, p.y * H, p.r * (0.7 + pulse * 0.3), 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 80%, 85%, ${p.a * pulse})`;
+      ctx.fill();
+    });
+
+    // Subtle horizontal light streak
+    const streak = ctx.createLinearGradient(0, H * 0.5, W, H * 0.5);
+    streak.addColorStop(0,   'rgba(56, 210, 180, 0)');
+    streak.addColorStop(0.35,'rgba(56, 210, 180, 0.012)');
+    streak.addColorStop(0.5, 'rgba(123, 141, 255, 0.018)');
+    streak.addColorStop(0.65,'rgba(56, 210, 180, 0.012)');
+    streak.addColorStop(1,   'rgba(56, 210, 180, 0)');
+    ctx.fillStyle = streak;
+    ctx.fillRect(0, H * 0.48, W, H * 0.04);
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ===================================================
+   SLIDE NAVIGATOR
+   =================================================== */
+const S = document.querySelectorAll('.slide');
+const C = document.getElementById('counter');
+const H_HINT = document.getElementById('arrowHint');
+const P = document.getElementById('progress');
+let c = 0;
+
+function go(i){
+  S.forEach(s => s.classList.remove('active'));
+  S[i].classList.add('active');
+  c = i;
+  S[i].scrollTop = 0;
+  C.textContent = (i + 1) + ' / ' + S.length;
+  P.style.width = ((i + 1) / S.length * 100) + '%';
+  H_HINT.style.display = 'block';
+  clearTimeout(window._hTimer);
+  window._hTimer = setTimeout(() => { H_HINT.style.display = 'none' }, 2500);
+}
+
+window.addEventListener('keydown', e => {
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){ e.preventDefault(); e.stopPropagation(); go(c < S.length - 1 ? c + 1 : 0); }
+  else if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); e.stopPropagation(); go(c > 0 ? c - 1 : S.length - 1); }
+  else if(e.key === 'Home'){ e.preventDefault(); e.stopPropagation(); go(0); }
+  else if(e.key === 'End'){ e.preventDefault(); e.stopPropagation(); go(S.length - 1); }
+  else if(e.key === 'f' || e.key === 'F'){ e.preventDefault(); e.stopPropagation(); document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+
+window.addEventListener('wheel', e => {
+  if(e.deltaY > 0 && c < S.length - 1){ e.preventDefault(); go(c + 1); }
+  else if(e.deltaY < 0 && c > 0){ e.preventDefault(); go(c - 1); }
+}, { passive: false });
+
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if(Math.abs(dx) > 60){ dx < 0 && c < S.length - 1 ? go(c + 1) : dx > 0 && c > 0 ? go(c - 1) : null; }
+});
+
+S.forEach(s => s.addEventListener('click', () => window.focus()));
+go(0);
+setTimeout(() => { H_HINT.style.display = 'none' }, 3500);
+</script>
+</body>
+</html>

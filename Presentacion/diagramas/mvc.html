@@ -21,15 +21,11 @@ flowchart LR
     subgraph M["&#128451; MODELO"]
     M1[Datos]
     end
-    subgraph B["&#128215; BASE DE DATOS"]
-    B1[SQLite]
-    end
-    V -->|1| C -->|2| M -->|3| B
-    B -->|4| M -->|5| C -->|6| V
+    V -->|1| C -->|2| M
+    M -->|3| C -->|4| V
     style V fill:#1e3a5f,stroke:#00d9ff,stroke-width:3px,color:#fff
     style C fill:#3a1e5f,stroke:#a855f7,stroke-width:3px,color:#fff
     style M fill:#1e5f3a,stroke:#4ade80,stroke-width:3px,color:#fff
-    style B fill:#5f3a1e,stroke:#fbbf24,stroke-width:3px,color:#fff
 </pre>
 </div>
 <script>

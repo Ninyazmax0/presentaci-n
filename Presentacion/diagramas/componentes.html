@@ -8,47 +8,42 @@
 body{background:transparent;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;font-family:"Segoe UI",sans-serif;}
 .diagram-box{width:100%;text-align:center;}
 pre.mermaid{background:transparent !important;}
-
 </style></head><body>
 <div class="diagram-box">
 <pre class="mermaid">
-flowchart LR
-    subgraph UI["<<component>> Interfaz de Usuario"]
-        Login["Login.tsx<br/>Acceso al sistema"]
-        Dashboard["Dashboard.tsx<br/>Panel de estadísticas"]
-        Productos["Productos.tsx<br/>CRUD productos"]
-        Ventas["Ventas.tsx<br/>Punto de venta"]
-        Reportes["Reportes.tsx<br/>Generación informes"]
+flowchart TB
+    subgraph Client["<<externo>> Cliente Web"]
+        Browser["Navegador<br/>Angular / React"]
     end
 
-    subgraph Ctrl["<<component>> Controladores"]
-        AuthCtrl["AuthController<br/>login(), logout()"]
-        ProdCtrl["ProductoController<br/>crear(), editar()"]
-        VentaCtrl["VentaController<br/>registrar(), total()"]
-        AlertaCtrl["AlertaController<br/>verificarStock()"]
+    subgraph GCP["<<plataforma>> Google Cloud Platform"]
+        subgraph LB["Load Balancer"]
+            LB1["HTTPS / SSL"]
+        end
+
+        subgraph CloudRun["<<runtime>> Cloud Run"]
+            API["API REST .NET Core 8<br/>Controllers · Services"]
+        end
+
+        subgraph CloudSQL["<<database>> Cloud SQL"]
+            MySQL["MySQL 8.0<br/>Productos · Lotes · Ventas"]
+        end
+
+        subgraph Redis["<<cache>> Memorystore"]
+            Cache["Redis Caché<br/>Sesiones · Consultas Frecuentes"]
+        end
+
+        subgraph Storage["<<storage>> Cloud Storage"]
+            Backups["Respaldos Automáticos<br/>Audit Logs"]
+        end
     end
 
-    subgraph Model["<<component>> Modelo de Datos"]
-        Entidades["Usuario / Producto<br/>Compra / Venta<br/>Proveedor / Alerta"]
-        Types["types.ts<br/>Interfaces TypeScript"]
-    end
-
-    subgraph Persist["<<component>> Persistencia"]
-        Memoria["Estado en Memoria<br/>React Context API"]
-        Seed["Datos Semilla<br/>10 productos, 4 usuarios"]
-    end
-
-    Login --> AuthCtrl
-    Dashboard & Reportes --> VentaCtrl
-    Productos --> ProdCtrl
-    Ventas --> VentaCtrl
-    AuthCtrl --> Entidades
-    ProdCtrl --> Entidades
-    VentaCtrl --> Entidades
-    AlertaCtrl --> Entidades
-    Entidades -->|"implementa"| Types
-    Entidades -->|"persiste en"| Memoria
-    Memoria -->|"inicializa"| Seed
+    Browser -->|"HTTPS"| LB
+    LB -->|"Ruteo"| API
+    API -->|"SQL"| MySQL
+    API -->|"Cache"| Cache
+    API -->|"Logs"| Backups
+    MySQL -->|"Backup"| Backups
 </pre>
 </div>
 <script>
