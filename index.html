@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Presentación Oficial — Farmacia Santa Cruz</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -34,7 +34,7 @@
   --mono:'DM Mono',monospace;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased}
+html,body{width:100%;height:100%;overflow-y:scroll;overflow-x:hidden;font-family:var(--font);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-snap-type:y mandatory}
 
 /* ===== AURORA BACKGROUND ===== */
 #aurora-canvas{
@@ -65,19 +65,20 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
 }
 
 /* ===== SLIDES ===== */
-.slides{position:relative;width:100vw;height:100vh}
+.slides{position:relative;width:100vw}
 .slide{
-  position:absolute;top:0;left:0;width:100%;height:100%;
+  position:relative;width:100%;min-height:100vh;height:auto;
   padding:6vh 6vw;
   display:flex;flex-direction:column;
-  opacity:0;visibility:hidden;
-  transform:translateY(16px) scale(.98);
-  transition:opacity .45s cubic-bezier(.25,1,.5,1),transform .45s cubic-bezier(.25,1,.5,1),visibility .45s;
-  overflow:hidden;
+  opacity:1;visibility:visible;
+  transform:none;
+  overflow-y:auto;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
 }
-.slide.active{opacity:1;visibility:visible;z-index:10;transform:translateY(0) scale(1)}
+.slide.active{z-index:10}
 
-/* Stagger */
+/* Stagger — triggered via IntersectionObserver */
 .stagger>*{opacity:0;transform:translateY(18px);transition:opacity .5s cubic-bezier(.25,1,.5,1),transform .5s cubic-bezier(.25,1,.5,1)}
 .slide.active .stagger>*{opacity:1;transform:translateY(0)}
 .slide.active .stagger>*:nth-child(1){transition-delay:.08s}
@@ -98,7 +99,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
 .sbody{flex:1;display:flex;flex-direction:column;justify-content:center;gap:1.8vh;min-height:0}
 
 /* ===== COVER ===== */
-.slide.cover{justify-content:center;align-items:center;text-align:center}
+.slide.cover{justify-content:center;align-items:center;text-align:center;height:100vh;min-height:100vh}
 .badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:7px 22px;
@@ -166,7 +167,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
 .ulist li::before{content:'\f101';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;left:1.2vw;top:50%;transform:translateY(-50%);color:var(--em)}
 
 /* ===== FULL SLIDE IFRAME ===== */
-.slide.iframe-slide{padding:0;overflow:hidden}
+.slide.iframe-slide{padding:0;overflow:hidden;height:100vh;min-height:100vh}
 .iframe-slide .iframe-header{
   position:absolute;top:0;left:0;right:0;
   height:48px;
@@ -246,7 +247,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
 .conclusion p{font-size:clamp(13px,1.7vh,20px);color:var(--t2);line-height:1.8;margin:.8vh 0}
 
 /* ===== CHAPTER ===== */
-.slide.chapter{justify-content:center;align-items:center;text-align:center}
+.slide.chapter{justify-content:center;align-items:center;text-align:center;height:100vh;min-height:100vh}
 .ch-n{
   font-size:clamp(72px,12vh,140px);font-weight:900;
   background:linear-gradient(135deg,var(--em),var(--in),var(--cy));
@@ -390,18 +391,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
   font-size:12px;font-weight:600;color:var(--em);
   background:rgba(8,14,30,.92);backdrop-filter:blur(8px);
   padding:5px 14px;border-radius:10px;border:1px solid rgba(56,210,180,.18);
-  font-family:var(--mono);display:none;
+  font-family:var(--mono);
 }
-#arrowHint{
-  position:fixed;bottom:60px;left:50%;transform:translateX(-50%);z-index:100;
-  font-size:1.4rem;color:var(--t3);animation:pulse-h 2.5s infinite;pointer-events:none;opacity:.25;
-  display:none;
-}
-@keyframes pulse-h{0%,100%{opacity:.1}50%{opacity:.55}}
+#arrowHint{display:none!important}
 .help-bar{
   position:fixed;bottom:22px;left:24px;z-index:100;
   display:flex;align-items:center;gap:10px;font-size:11px;color:var(--t3);pointer-events:none;
-  font-family:var(--mono);display:none;
+  font-family:var(--mono);
 }
 .help-bar kbd{
   background:rgba(100,160,200,.08);border:1px solid var(--bdr);
@@ -945,6 +941,69 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
   </div>
 </div>
 
+<!-- ==================== CAPAS DETALLE 3 — Seguridad ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>f. Detalle de Capas — Seguridad y Autenticación</span><span class="shead-sub">Layers Detail — Part 3</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-shield-halved" style="color:var(--rd);margin-right:8px"></i>Capa de Seguridad (Security)</h4>
+        <p><strong>Responsabilidad:</strong> Proteger el acceso a los recursos del sistema mediante autenticación robusta, autorización por roles y cifrado de datos sensibles.</p>
+        <p><strong>En SGIFSC:</strong> Autenticación JWT con tokens de acceso y refresh, roles <strong>Dueña</strong> y <strong>Empleado</strong>, sesión de 30 minutos, recuperación de contraseña por correo electrónico con enlace seguro.</p>
+        <p><strong>Herramientas:</strong> ASP.NET Core Identity, JWT Bearer, BCrypt, Data Protection API.</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-clipboard-check" style="color:var(--am);margin-right:8px"></i>Capa de Auditoría (Audit)</h4>
+        <p><strong>Responsabilidad:</strong> Registrar todas las operaciones críticas del sistema para garantizar trazabilidad, rendición de cuentas y cumplimiento regulatorio.</p>
+        <p><strong>En SGIFSC:</strong> AuditLog inmutable por cada transacción (ventas, compras, eliminaciones), registro de IP, usuario, acción y timestamp. Integridad garantizada mediante append-only.</p>
+        <p><strong>Herramientas:</strong> Serilog, tablas de auditoría, Cloud Storage para backup.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CAPAS DETALLE 4 — Infraestructura ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>f. Detalle de Capas — Infraestructura y Comunicación</span><span class="shead-sub">Layers Detail — Part 4</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-cloud-arrow-up" style="color:var(--cy);margin-right:8px"></i>Capa de Infraestructura (Cloud)</h4>
+        <p><strong>Responsabilidad:</strong> Proporcionar el entorno de ejecución escalable, resiliente y monitoreado para todos los componentes del sistema.</p>
+        <p><strong>En SGIFSC:</strong> Contenedores Docker orquestados en Cloud Run, base de datos administrada en Cloud SQL, caché distribuida con Redis Memorystore, almacenamiento de respaldos en Cloud Storage.</p>
+        <p><strong>Herramientas:</strong> Google Cloud Run, Cloud SQL, Memorystore, Cloud Storage, Docker, GitHub Actions (CI/CD).</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-network-wired" style="color:var(--in);margin-right:8px"></i>Capa de Comunicación (API Gateway)</h4>
+        <p><strong>Responsabilidad:</strong> Gestionar el ruteo, balanceo de carga, seguridad perimetral y transformación de protocolos entre el frontend y los servicios backend.</p>
+        <p><strong>En SGIFSC:</strong> API RESTful sobre HTTPS, Load Balancer con SSL termination, limitación de tasa (rate limiting), CORS configurado y validación de esquemas con FluentValidation.</p>
+        <p><strong>Herramientas:</strong> Google Cloud Load Balancer, .NET Core Middleware, FluentValidation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CAPAS DETALLE 5 — Integración ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>f. Detalle de Capas — Integración y Cache</span><span class="shead-sub">Layers Detail — Part 5</span></div>
+  <div class="sbody">
+    <div class="cgrid c2 stagger">
+      <div class="card">
+        <h4><i class="fas fa-plug" style="color:var(--em);margin-right:8px"></i>Capa de Integración (Integration)</h4>
+        <p><strong>Responsabilidad:</strong> Facilitar la comunicación con sistemas externos y servicios de terceros mediante adaptadores y contratos estandarizados.</p>
+        <p><strong>En SGIFSC:</strong> Integración con servicio de correo SMTP para notificaciones de alertas y recuperación de contraseña, exportación de reportes a PDF/Excel, y webhooks para backup programado.</p>
+        <p><strong>Herramientas:</strong> SmtpClient, ClosedXML, DinkToPdf, Hangfire (tareas programadas).</p>
+      </div>
+      <div class="card">
+        <h4><i class="fas fa-bolt" style="color:var(--am);margin-right:8px"></i>Capa de Cache (Caching)</h4>
+        <p><strong>Responsabilidad:</strong> Mejorar el rendimiento del sistema almacenando en memoria datos de consulta frecuente para reducir la latencia y la carga en la base de datos.</p>
+        <p><strong>En SGIFSC:</strong> Cache de catálogo de productos, sesiones de usuario activas, consultas de dashboard y datos maestros (categorías, proveedores).</p>
+        <p><strong>Herramientas:</strong> Redis Memorystore, IDistributedCache, Response Caching Middleware.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== CASOS DE USO — INTRO ==================== -->
 <div class="slide">
   <div class="shead"><span class="shead-title"><span class="bar"></span>f. Vista de Casos de Uso — Introducción</span><span class="shead-sub">Use Case View — Overview</span></div>
@@ -1172,6 +1231,29 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
   </div>
 </div>
 
+<!-- ==================== CONCLUSIÓN EN ==================== -->
+<div class="slide">
+  <div class="shead"><span class="shead-title"><span class="bar in"></span>g. Project Conclusion</span></div>
+  <div class="sbody" style="justify-content:center">
+    <div class="stats" style="margin-bottom:2.5vh">
+      <div class="stat">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Loss Reduction</div>
+        <div class="stat-desc">Through expiration control and optimal stock</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="background:linear-gradient(135deg,var(--in),var(--pu));-webkit-background-clip:text;-webkit-text-fill-color:transparent">30%</div>
+        <div class="stat-label">Time Savings</div>
+        <div class="stat-desc">In product search and registration</div>
+      </div>
+    </div>
+    <div class="conclusion">
+      <p>The design of the architectural baseline for the inventory management system of <strong>Farmacia Santa Cruz</strong> complies with international standards <strong>ISO/IEC/IEEE 42010:2022</strong>, <strong>ISO 12207</strong>, and <strong>ISO 27002</strong>.</p>
+      <p>The N-Tier structure in 4 decoupled layers (Presentation, Business Logic, Data Access, Database) guarantees that the system can grow without compromising operational stability. The UML diagrams and visual prototypes serve as the definitive blueprint for secure and efficient cloud development.</p>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== GRACIAS ==================== -->
 <div class="slide" style="justify-content:center;align-items:center;text-align:center">
   <div class="ch-n" style="font-size:clamp(56px,10vh,120px);margin-bottom:2vh">GRACIAS</div>
@@ -1295,49 +1377,72 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);backgro
 })();
 
 /* ===================================================
-   SLIDE NAVIGATOR
+   SLIDE NAVIGATOR — Natural scroll + IntersectionObserver
    =================================================== */
 const S = document.querySelectorAll('.slide');
 const C = document.getElementById('counter');
-const H_HINT = document.getElementById('arrowHint');
 const P = document.getElementById('progress');
-let c = 0;
 
-function go(i){
-  S.forEach(s => s.classList.remove('active'));
-  S[i].classList.add('active');
-  c = i;
-  S[i].scrollTop = 0;
-  C.textContent = (i + 1) + ' / ' + S.length;
-  P.style.width = ((i + 1) / S.length * 100) + '%';
-  H_HINT.style.display = 'block';
-  clearTimeout(window._hTimer);
-  window._hTimer = setTimeout(() => { H_HINT.style.display = 'none' }, 2500);
+function updateCounter(){
+  let idx = 0;
+  S.forEach((s, i) => { if(s.classList.contains('active')) idx = i; });
+  C.textContent = (idx + 1) + ' / ' + S.length;
+  P.style.width = ((idx + 1) / S.length * 100) + '%';
 }
 
-window.addEventListener('keydown', e => {
-  if(['ArrowRight','ArrowDown',' '].includes(e.key)){ e.preventDefault(); e.stopPropagation(); go(c < S.length - 1 ? c + 1 : 0); }
-  else if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); e.stopPropagation(); go(c > 0 ? c - 1 : S.length - 1); }
-  else if(e.key === 'Home'){ e.preventDefault(); e.stopPropagation(); go(0); }
-  else if(e.key === 'End'){ e.preventDefault(); e.stopPropagation(); go(S.length - 1); }
-  else if(e.key === 'f' || e.key === 'F'){ e.preventDefault(); e.stopPropagation(); document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+/* IntersectionObserver to set active class (for stagger animations) */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('active');
+    } else {
+      entry.target.classList.remove('active');
+    }
+  });
+}, { threshold: 0.35 });
+
+S.forEach(s => obs.observe(s));
+
+/* Update counter on scroll */
+let _scrollTimer;
+document.addEventListener('scroll', () => {
+  clearTimeout(_scrollTimer);
+  _scrollTimer = setTimeout(updateCounter, 100);
 });
 
-window.addEventListener('wheel', e => {
-  if(e.deltaY > 0 && c < S.length - 1){ e.preventDefault(); go(c + 1); }
-  else if(e.deltaY < 0 && c > 0){ e.preventDefault(); go(c - 1); }
-}, { passive: false });
+/* Keyboard — scrollIntoView instead of visibility toggle */
+window.addEventListener('keydown', e => {
+  const active = document.querySelector('.slide.active') || S[0];
+  let idx = Array.from(S).indexOf(active);
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){
+    e.preventDefault();
+    if(idx < S.length - 1){ S[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+  else if(['ArrowLeft','ArrowUp'].includes(e.key)){
+    e.preventDefault();
+    if(idx > 0){ S[idx - 1].scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+  else if(e.key === 'Home'){ e.preventDefault(); S[0].scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  else if(e.key === 'End'){ e.preventDefault(); S[S.length - 1].scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  else if(e.key === 'f' || e.key === 'F'){ e.preventDefault(); document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
 
+/* Touch swipe — scroll instead of go() */
 let tx = 0;
 document.addEventListener('touchstart', e => { tx = e.touches[0].clientX });
 document.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - tx;
-  if(Math.abs(dx) > 60){ dx < 0 && c < S.length - 1 ? go(c + 1) : dx > 0 && c > 0 ? go(c - 1) : null; }
+  const active = document.querySelector('.slide.active') || S[0];
+  let idx = Array.from(S).indexOf(active);
+  if(Math.abs(dx) > 60){
+    if(dx < 0 && idx < S.length - 1) S[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    else if(dx > 0 && idx > 0) S[idx - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 });
 
-S.forEach(s => s.addEventListener('click', () => window.focus()));
-go(0);
-setTimeout(() => { H_HINT.style.display = 'none' }, 3500);
+/* Set active on first slide initially */
+S[0].classList.add('active');
+updateCounter();
 </script>
 </body>
 </html>

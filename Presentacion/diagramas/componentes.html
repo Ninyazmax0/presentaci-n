@@ -12,28 +12,28 @@ pre.mermaid{background:transparent !important;}
 <div class="diagram-box">
 <pre class="mermaid">
 flowchart TB
-    subgraph Client["<<externo>> Cliente Web"]
+    subgraph Client["[externo] Cliente Web"]
         Browser["Navegador<br/>Angular / React"]
     end
 
-    subgraph GCP["<<plataforma>> Google Cloud Platform"]
+    subgraph GCP["[plataforma] Google Cloud Platform"]
         subgraph LB["Load Balancer"]
             LB1["HTTPS / SSL"]
         end
 
-        subgraph CloudRun["<<runtime>> Cloud Run"]
+        subgraph CloudRun["[runtime] Cloud Run"]
             API["API REST .NET Core 8<br/>Controllers · Services"]
         end
 
-        subgraph CloudSQL["<<database>> Cloud SQL"]
+        subgraph CloudSQL["[database] Cloud SQL"]
             MySQL["MySQL 8.0<br/>Productos · Lotes · Ventas"]
         end
 
-        subgraph Redis["<<cache>> Memorystore"]
+        subgraph Redis["[cache] Memorystore"]
             Cache["Redis Caché<br/>Sesiones · Consultas Frecuentes"]
         end
 
-        subgraph Storage["<<storage>> Cloud Storage"]
+        subgraph Storage["[storage] Cloud Storage"]
             Backups["Respaldos Automáticos<br/>Audit Logs"]
         end
     end
