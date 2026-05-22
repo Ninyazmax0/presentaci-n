@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitectura N-Capas</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 24px;
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+        .diagram-box {
+            width: 100%;
+            max-width: 600px;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        pre.mermaid {
+            background: transparent !important;
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart TD
+    TITLE["ARQUITECTURA N-TIER / MVC<br/>4 Capas - SGIFSC"]
+
+    PRES["1. Capa de Presentación<br/><span style='font-weight:400;font-size:13px;color:#38bdf8'>Angular / React · Bootstrap · Chart.js</span><br/><span style='font-size:12px;color:#94a3b8'>Login · Dashboard · POS · Alertas · Reportes</span>"]
+    BLL["2. Capa de Lógica de Negocio<br/><span style='font-weight:400;font-size:13px;color:#a78bfa'>.NET Core 8 · C# · AutoMapper · FluentValidation</span><br/><span style='font-size:12px;color:#94a3b8'>Stock FIFO · Alertas Vencimiento · Precios · JWT</span>"]
+    DAL["3. Capa de Acceso a Datos<br/><span style='font-weight:400;font-size:13px;color:#2dd4bf'>Entity Framework Core · MySQL Connector · LINQ</span><br/><span style='font-size:12px;color:#94a3b8'>CRUD · Unit of Work · Repositorios</span>"]
+    DB["4. Capa de Base de Datos<br/><span style='font-weight:400;font-size:13px;color:#fbbf24'>MySQL 8.0 · Google Cloud SQL · Redis Cache</span><br/><span style='font-size:12px;color:#94a3b8'>Productos · Lotes · Ventas · Usuarios · Alertas</span>"]
+
+    TITLE --> PRES
+    PRES -->|"API REST / HTTPS"| BLL
+    BLL -->|"Repository Pattern"| DAL
+    DAL -->|"SQL / Cloud SQL"| DB
+
+    style TITLE fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#fff,font-weight:700,font-size:16px
+
+    style PRES fill:#0f172a,stroke:#38bdf8,stroke-width:1px,color:#fff
+    style BLL fill:#0f172a,stroke:#a78bfa,stroke-width:1px,color:#fff
+    style DAL fill:#0f172a,stroke:#2dd4bf,stroke-width:1px,color:#fff
+    style DB fill:#0f172a,stroke:#fbbf24,stroke-width:1px,color:#fff
+
+    linkStyle default stroke:#64748b,stroke-width:2px,color:#94a3b8
+</pre>
+</div>
+
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+        background: 'transparent',
+        mainBkg: '#0f172a',
+        lineColor: '#64748b',
+        edgeLabelBackground: '#1e293b',
+        textColor: '#94a3b8'
+    }
+});
+</script>
+
+</body>
+</html>

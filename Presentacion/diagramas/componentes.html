@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama de Componentes</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:transparent;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;font-family:"Segoe UI",sans-serif;}
+.diagram-box{width:100%;text-align:center;}
+pre.mermaid{background:transparent !important;}
+
+</style></head><body>
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart LR
+    subgraph UI["<<component>> Interfaz de Usuario"]
+        Login["Login.tsx<br/>Acceso al sistema"]
+        Dashboard["Dashboard.tsx<br/>Panel de estadísticas"]
+        Productos["Productos.tsx<br/>CRUD productos"]
+        Ventas["Ventas.tsx<br/>Punto de venta"]
+        Reportes["Reportes.tsx<br/>Generación informes"]
+    end
+
+    subgraph Ctrl["<<component>> Controladores"]
+        AuthCtrl["AuthController<br/>login(), logout()"]
+        ProdCtrl["ProductoController<br/>crear(), editar()"]
+        VentaCtrl["VentaController<br/>registrar(), total()"]
+        AlertaCtrl["AlertaController<br/>verificarStock()"]
+    end
+
+    subgraph Model["<<component>> Modelo de Datos"]
+        Entidades["Usuario / Producto<br/>Compra / Venta<br/>Proveedor / Alerta"]
+        Types["types.ts<br/>Interfaces TypeScript"]
+    end
+
+    subgraph Persist["<<component>> Persistencia"]
+        Memoria["Estado en Memoria<br/>React Context API"]
+        Seed["Datos Semilla<br/>10 productos, 4 usuarios"]
+    end
+
+    Login --> AuthCtrl
+    Dashboard & Reportes --> VentaCtrl
+    Productos --> ProdCtrl
+    Ventas --> VentaCtrl
+    AuthCtrl --> Entidades
+    ProdCtrl --> Entidades
+    VentaCtrl --> Entidades
+    AlertaCtrl --> Entidades
+    Entidades -->|"implementa"| Types
+    Entidades -->|"persiste en"| Memoria
+    Memoria -->|"inicializa"| Seed
+</pre>
+</div>
+<script>
+mermaid.initialize({startOnLoad:true,theme:"base",themeVariables:{
+background:"transparent",primaryColor:"#e3f2fd",primaryBorderColor:"#1565c0",
+primaryTextColor:"#0d47a1",lineColor:"#546e7a",secondaryColor:"#f1faf2",
+tertiaryColor:"#fff8f8",mainBkg:"#e3f2fd",nodeBorder:"#1565c0"
+}});
+</script></body></html>
